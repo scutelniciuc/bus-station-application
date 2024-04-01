@@ -3,8 +3,10 @@ from faker import Faker
 from bus_station.models import Driver, Bus
 from datetime import date
 from django.utils import timezone
+from django.test import Client
 
 fake = Faker()
+
 
 @pytest.fixture
 def driver_data():
@@ -16,9 +18,11 @@ def driver_data():
         'date_joined': date.today()
     }
 
+
 @pytest.fixture
 def driver_sample(driver_data):
     return Driver.objects.create(**driver_data)
+
 
 @pytest.fixture
 def bus_data(driver_sample):
@@ -33,6 +37,32 @@ def bus_data(driver_sample):
         'status': fake.random_element(elements=['on_platform', 'arriving', 'leaving', 'left'])
     }
 
+
 @pytest.fixture
 def bus_sample(bus_data):
     return Bus.objects.create(**bus_data)
+
+
+@pytest.fixture
+def bus_sample_2(bus_data):
+    bus_data['registration_plate'] = fake.license_plate()
+    return Bus.objects.create(**bus_data)
+
+
+@pytest.fixture
+def bus_sample_for_reservations(bus_data):
+    bus_data['status'] = 'on_platform'
+    bus_data['max_seats'] = 20
+    bus_data['seats_available'] = 10
+    return Bus.objects.create(**bus_data)
+
+
+@pytest.fixture
+def bus_sample_full(bus_data):
+    bus_data['max_seats'] = 20
+    bus_data['seats_available'] = 0
+    return Bus.objects.create(**bus_data)
+
+@pytest.fixture
+def client():
+    return Client()

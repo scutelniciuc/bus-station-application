@@ -3,8 +3,11 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponseBadRequest
 from .exceptions import SeatReservationError
 
+
 def is_status_leaving_or_left(status):
     return status in ['leaving', 'left']
+
+
 class BusManager(models.Manager):
     def get_all_buses(self):
         return self.all()
