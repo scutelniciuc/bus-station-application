@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, RegexValidator
 from .constants import BUS_STATUS_CHOICES
+from .managers import BusManager
 
 class User(AbstractUser):
     pass
@@ -38,6 +39,8 @@ class Bus(models.Model):
     max_seats = models.IntegerField(validators=[MinValueValidator(8)])
     seats_available = models.IntegerField(validators=[MinValueValidator(0)])
     status = models.CharField(max_length=16, choices=BUS_STATUS_CHOICES)
+
+    objects = BusManager()
 
     class Meta:
         verbose_name_plural = "Buses"
