@@ -26,9 +26,9 @@ class Bus(models.Model):
         unique=True,
         validators=[
             RegexValidator(
-                regex=r'^[A-Z0-9]{2}-[A-Z0-9]{2}-[A-Z0-9]{2}$',
-                message='Format must be XX-XX-XX',
-                code='invalid_registration_plate'
+                regex=r'^[A-Z0-9]+(?:[- ][A-Z0-9]+)?$',
+                message='Invalid license plate format.',
+                code='invalid_license_plate'
             )
         ]
     )
