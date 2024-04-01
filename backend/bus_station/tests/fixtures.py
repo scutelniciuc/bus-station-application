@@ -2,6 +2,7 @@ import pytest
 from faker import Faker
 from bus_station.models import Driver, Bus
 from datetime import date
+from django.utils import timezone
 
 fake = Faker()
 
@@ -26,7 +27,7 @@ def bus_data(driver_sample):
         'registration_plate': fake.license_plate(),
         'driver': driver_sample,
         'end_destination': fake.address(),
-        'time_of_departure': fake.date_time_between(start_date='now', end_date='+30d'),
+        'time_of_departure': timezone.now(),
         'max_seats': max_seats,
         'seats_available': max_seats,
         'status': fake.random_element(elements=['on_platform', 'arriving', 'leaving', 'left'])
