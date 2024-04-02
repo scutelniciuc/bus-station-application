@@ -1,53 +1,78 @@
+/*
+ * Class representing an API client to interact with the django backend
+ */
 export class ApiClient {
-    constructor(url) {
-        this.apiUrl = url;
-    }
+  /*
+   * Create API client
+   * @param {string} baseUrl - Backend's base url
+   * */
+  constructor(baseUrl) {
+    this.apiUrl = baseUrl;
+  }
 
-    async getBusesList() {
-        const response = await fetch(this.apiUrl + "/api/bus-list/");
-        const data = await response.json();
-        return data
-    }
+  /*
+   * Get the list of all buses
+   * @returns {Array<Object>} Array of buses
+   * */
+  async getBusesList() {
+    const response = await fetch(this.apiUrl + "/api/bus-list/");
+    const data = await response.json();
+    return data;
+  }
 
-    async postReserveSeat(registrationPlate) {
+  /*
+   * Reserves a seat in a bus
+   * @param {string} registration_plate
+   * @returns {<Object>} Updated bus with reserved seat
+   * */
+  async postReserveSeat(registrationPlate) {
     try {
-        const response = await fetch(`${this.apiUrl}/api/bus/${registrationPlate}/reserve-seat/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
+      const response = await fetch(
+        `${this.apiUrl}/api/bus/${registrationPlate}/reserve-seat/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-        if (!response.ok) {
-            throw new Error('Error reserving seat');
-        }
+      if (!response.ok) {
+        throw new Error("Error reserving seat");
+      }
 
-        const data = await response.json();
-        return data
+      const data = await response.json();
+      return data;
     } catch (error) {
-        console.error('Error', error.message);
+      console.error("Error", error.message);
     }
+  }
 
-
-}
-
-async postUnreserveSeat(registrationPlate) {
+  /*
+   * Unreserves a seat in a bus
+   * @param {string} registration_plate
+   * @returns {<Object>} Updated bus with unreserved seat
+   * */
+  async postUnreserveSeat(registrationPlate) {
     try {
-        const response = await fetch(`${this.apiUrl}/api/bus/${registrationPlate}/unreserve-seat/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
+      const response = await fetch(
+        `${this.apiUrl}/api/bus/${registrationPlate}/unreserve-seat/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-        if (!response.ok) {
-            throw new Error('Error reserving seat');
-        }
+      if (!response.ok) {
+        throw new Error("Error reserving seat");
+      }
 
-        const data = await response.json();
-        return data
+      const data = await response.json();
+      return data;
     } catch (error) {
-        console.error('Error', error.message);
+      console.error("Error", error.message);
     }
-}
+  }
 }
