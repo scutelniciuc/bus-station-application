@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 .main {
 	display: flex;
     justify-content: center;
@@ -9,4 +14,20 @@
 .bus-schedule, .bus-schedule > table, th, td {
   border: 1px solid black;
     text-align: center;
+}
+
+.bus-full {
+    background-color: lightcoral;
+}
+
+.bus-leaving {
+    background-color: lightblue;
+}
+
+.bus-arriving {
+    background-color: darkseagreen;
+}
+
+.low-seats {
+    background-color: lightyellow;
 }
