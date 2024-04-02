@@ -54,6 +54,7 @@ function createRow(bus) {
 function renderButton(bus) {
     const button = document.createElement('button');
     button.textContent = 'Reserve';
+    button.id = 'reserve'
 
     if(bus.seats_available == 0) {
         button.textContent = 'No seats available';
@@ -64,20 +65,35 @@ function renderButton(bus) {
     }
 
     button.addEventListener('click', async () => {
-        apiClient.postReserveSeat(bus.registration_plate)
+        if(button.id == 'reserve') {
+            apiClient.postReserveSeat(bus.registration_plate)
         .then(data => {
-            console.log(data);
-            updateRow(bus, data)
+            button.textContent = 'Unreserve';
+            button.id = 'unreserve';
+            updateRow(bus, data, button)
         })
         .catch(error => {
             console.error('Error:', error.message);
         });
+        }
+        if(button.id == 'unreserve') {
+            button.textContent = 'Reserve';
+            button.id = 'reserve';
+            apiClient.postUnreserveSeat(bus.registration_plate)
+        .then(data => {
+            console.log(data);
+            updateRow(bus, data, button)
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        });
+        }
     });
 
     return button
 }
 
-function updateRow(bus, newData) {
+function updateRow(bus, newData, button) {
     const existingRow = document.getElementById(bus.registration_plate);
 
     existingRow.innerHTML = `
@@ -97,8 +113,8 @@ function updateRow(bus, newData) {
     }
 
     const cell = document.createElement('td');
-    const button = renderButton(bus);
+    // const button = renderButton(bus);
     cell.appendChild(button);
     existingRow.appendChild(cell);
-    
+
 }
