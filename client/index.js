@@ -47,10 +47,11 @@ function createRow(bus) {
         cell.appendChild(button);
         tr.appendChild(cell);
 
+        tr.id = bus.registration_plate
         return tr
 }
 
-export function renderButton(bus) {
+function renderButton(bus) {
     const button = document.createElement('button');
     button.textContent = 'Reserve';
 
@@ -62,5 +63,42 @@ export function renderButton(bus) {
         button.disabled = true;
     }
 
+    button.addEventListener('click', async () => {
+        apiClient.postReserveSeat(bus.registration_plate)
+        .then(data => {
+            console.log(data);
+            updateRow(bus, data)
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        });
+    });
+
     return button
+}
+
+function updateRow(bus, newData) {
+    const existingRow = document.getElementById(bus.registration_plate);
+
+    existingRow.innerHTML = `
+        <td>${newData.end_destination}</td>
+        <td>${convertDepartureTime(newData.time_of_departure)}</td>
+        <td>${newData.max_seats}</td>
+        <td>${newData.seats_available}</td>
+        <td>${newData.registration_plate}</td>
+        <td>${newData.driver}</td>
+        <td>${convertStatus(newData.status)}</td>
+    `;
+
+    const trClass = getRowClass(newData);
+    if (trClass) {
+        existingRow.className = '';
+        existingRow.classList.add(trClass);
+    }
+
+    const cell = document.createElement('td');
+    const button = renderButton(bus);
+    cell.appendChild(button);
+    existingRow.appendChild(cell);
+    
 }
