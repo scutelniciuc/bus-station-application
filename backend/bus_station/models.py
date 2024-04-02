@@ -4,10 +4,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, RegexValidator
 from .constants import BUS_STATUS_CHOICES
-from .managers import BusManager
+from .managers import BusManager, UserManager
+from datetime import date
+
 
 class User(AbstractUser):
-    pass
+    objects = UserManager()
+
 
 class Driver(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -19,6 +22,7 @@ class Driver(models.Model):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
 
 class Bus(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -39,6 +43,7 @@ class Bus(models.Model):
     max_seats = models.IntegerField(validators=[MinValueValidator(8)])
     seats_available = models.IntegerField(validators=[MinValueValidator(0)])
     status = models.CharField(max_length=16, choices=BUS_STATUS_CHOICES)
+    last_service = models.DateField(default=date.today)
 
     objects = BusManager()
 

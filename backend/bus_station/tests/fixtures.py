@@ -1,6 +1,6 @@
 import pytest
 from faker import Faker
-from bus_station.models import Driver, Bus
+from bus_station.models import Driver, Bus, User
 from datetime import date
 from django.utils import timezone
 from django.test import Client
@@ -66,3 +66,7 @@ def bus_sample_full(bus_data):
 @pytest.fixture
 def client():
     return Client()
+
+@pytest.fixture
+def admin_sample():
+    return User.objects.create(email=fake.email(), password=fake.password(), is_superuser=True, is_staff=True)

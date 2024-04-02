@@ -2,6 +2,7 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponseBadRequest
 from .exceptions import SeatReservationError
+from django.utils import timezone
 
 
 def is_status_leaving_or_left(status):
@@ -37,3 +38,12 @@ class BusManager(models.Manager):
             return bus
         else:
             raise SeatReservationError("Bus is empty")
+
+    def get_buses_for_service_alert_email(self):
+        five_months_ago = timezone.now() - timezone.timedelta(days=30 * 5)
+        return self.filter(last_service__gte=five_months_ago)
+
+
+class UserManager(models.Manager):
+    def get_all_admins_emails(self):
+        return self.filter(is_staff=True, is_superuser=True).values_list('email', flat=True)
