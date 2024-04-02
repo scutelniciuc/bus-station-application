@@ -4,14 +4,19 @@ import { convertDepartureTime, convertStatus, getRowClass } from "./utils.js";
 const API_URL = "http://127.0.0.1:8000";
 const apiClient = new ApiClient(API_URL);
 
-apiClient
-  .getBusesList()
-  .then((buses) => {
-    populateTable(buses);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+/**
+ * Starts the application
+ */
+export function run() {
+  apiClient
+    .getBusesList()
+    .then((buses) => {
+      populateTable(buses);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 /**
  * Populates the bus schedule table with data from an array of Buses
@@ -67,7 +72,7 @@ function createRow(bus) {
  * @param {Object} bus - The bus object
  * @returns {HTMLButtonElement} A button element
  */
-function renderButton(bus) {
+export function renderButton(bus) {
   const button = document.createElement("button");
   button.textContent = "Reserve";
   button.id = "reserve";
