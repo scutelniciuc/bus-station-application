@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponseBadRequest
 from .exceptions import SeatReservationError
 from django.utils import timezone
+from django.contrib.auth.models import BaseUserManager
 
 
 def is_status_leaving_or_left(status):
@@ -44,6 +45,6 @@ class BusManager(models.Manager):
         return self.filter(last_service__gte=five_months_ago)
 
 
-class UserManager(models.Manager):
+class UserManager(BaseUserManager):
     def get_all_admins_emails(self):
         return self.filter(is_staff=True, is_superuser=True).values_list('email', flat=True)

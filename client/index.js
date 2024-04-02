@@ -1,7 +1,7 @@
 import { ApiClient } from "./apiClient.js";
 import { convertDepartureTime, convertStatus, getRowClass } from "./utils.js";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "http://0.0.0.0:8000";
 const apiClient = new ApiClient(API_URL);
 
 /**

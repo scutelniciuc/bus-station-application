@@ -8,9 +8,37 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - buses
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
+    networks:
+      - buses
+  api:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    environment:
+      - SECRET_KEY="sadas"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+      - redis
+    networks:
+      - buses
+  client:
+    build: ./client
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+    networks:
+      - buses
 volumes:
   postgres_data:
+networks:
+  buses:
